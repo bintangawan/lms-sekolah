@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SIMS - Sistem Informasi Manajemen Sekolah</title>
+    <link rel="icon" href="./images/favicon.ico" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+
+      .hero-gradient {
+        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1);
+      }
+
+      .stat-card {
+        transition: all 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: scale(1.05);
+      }
+
+      .testimonial-card {
+        transition: all 0.3s ease;
+      }
+
+      .testimonial-card:hover {
+        transform: translateY(-5px);
+      }
+
+      /* Chatbot Styles */
+      .chatbot-toggle {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 999;
+        transition: all 0.3s ease;
+      }
+
+      .chatbot-toggle:hover {
+        transform: scale(1.1);
+      }
+
+      .chatbot-container {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 350px;
+        height: 500px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        z-index: 998;
+        transition: all 0.3s ease;
+        transform-origin: bottom right;
+      }
+
+      .chatbot-hidden {
+        transform: scale(0);
+        opacity: 0;
+      }
+
+      .chatbot-header {
+        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+        padding: 15px 20px;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chatbot-messages {
+        height: 380px;
+        overflow-y: auto;
+        padding: 15px;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        max-width: 80%;
+        padding: 10px 15px;
+        border-radius: 18px;
+        position: relative;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .bot-message {
+        background: #f0f4f8;
+        color: #333;
+        border-top-left-radius: 4px;
+        align-self: flex-start;
+      }
+
+      .user-message {
+        background: #3b82f6;
+        color: white;
+        border-top-right-radius: 4px;
+        align-self: flex-end;
+        margin-left: auto;
+      }
+
+      .chatbot-input {
+        display: flex;
+        padding: 10px 15px;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .chatbot-input input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 10px;
+        border-radius: 30px;
+        background: #f0f4f8;
+      }
+
+      .chatbot-input button {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        margin-left: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .chatbot-input button:hover {
+        background: #2563eb;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm fixed w-full z-10">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 flex items-center">
+              <img
+                class="h-10 w-auto"
+                src="./images/favicon.ico"
+                alt="SIMS Logo"
+              />
+            </div>
+          </div>
+          <nav class="hidden md:flex items-center space-x-8">
+            <a href="#beranda" class="text-blue-600 font-medium">Beranda</a>
+            <a
+              href="#fitur"
+              class="text-gray-700 hover:text-blue-600 transition-colors duration-300"
+              >Fitur</a
+            >
+            <a
+              href="#tentang"
+              class="text-gray-700 hover:text-blue-600 transition-colors duration-300"
+              >Tentang</a
+            >
+            <a
+              href="#testimoni"
+              class="text-gray-700 hover:text-blue-600 transition-colors duration-300"
+              >Testimoni</a
+            >
+            <a
+              href="#kontak"
+              class="text-gray-700 hover:text-blue-600 transition-colors duration-300"
+              >Kontak</a
+            >
+          </nav>
+          <div class="flex items-center">
+            <a
+              href="#daftar"
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Daftar Sekarang
+            </a>
+          </div>
+          <div class="flex items-center md:hidden">
+            <button
+              type="button"
+              class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              aria-expanded="false"
+            >
+              <span class="sr-only">Buka menu utama</span>
+              <svg
+                class="block h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile menu, show/hide based on menu state -->
+      <div class="mobile-menu hidden md:hidden">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <a
+            href="#beranda"
+            class="block px-3 py-2 rounded-md text-base font-medium text-blue-600 bg-gray-50"
+            >Beranda</a
+          >
+          <a
+            href="#fitur"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            >Fitur</a
+          >
+          <a
+            href="#tentang"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            >Tentang</a
+          >
+          <a
+            href="#testimoni"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            >Testimoni</a
+          >
+          <a
+            href="#kontak"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+            >Kontak</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="hero-gradient pt-24 pb-16 md:pt-32 md:pb-24">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-1/2 mb-10 md:mb-0 reveal-left">
+            <h1
+              class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4"
+            >
+              Sistem Informasi Manajemen Sekolah Modern
+            </h1>
+            <p class="text-xl md:text-2xl text-blue-100 mb-8">
+              Kelola sekolah Anda dengan lebih efisien, transparan, dan
+              terintegrasi.
+            </p>
+            <div
+              class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
+            >
+              <a
+                href="#daftar"
+                class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
+              >
+                Mulai Sekarang
+              </a>
+              <a
+                href="#demo"
+                class="inline-flex justify-center items-center px-6 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
+              >
+                Lihat Demo
+              </a>
+            </div>
+          </div>
+          <div class="md:w-1/2 reveal-right">
+            <img
+              src="./images/dashboard-preview.jpg"
+              alt="Dashboard Preview"
+              class="rounded-lg shadow-xl"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="fitur" class="py-16 md:py-24 bg-white">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal-top">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Fitur Unggulan
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Sistem kami menyediakan berbagai fitur komprehensif untuk memudahkan
+            pengelolaan sekolah Anda.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Feature 1 -->
+          <div
+            class="feature-card bg-white p-6 rounded-lg shadow-md transition-all duration-300 reveal-item"
+          >
+            <div
+              class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-user-graduate text-blue-600 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              Manajemen Siswa
+            </h3>
+            <p class="text-gray-600">
+              Kelola data siswa, absensi, nilai, dan perkembangan akademik
+              dengan mudah dan terintegrasi.
+            </p>
+          </div>
+
+          <!-- Feature 2 -->
+          <div
+            class="feature-card bg-white p-6 rounded-lg shadow-md transition-all duration-300 reveal-item"
+          >
+            <div
+              class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-chalkboard-teacher text-blue-600 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              Manajemen Guru
+            </h3>
+            <p class="text-gray-600">
+              Pantau kinerja guru, jadwal mengajar, dan pengembangan profesional
+              secara efisien.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div
+            class="feature-card bg-white p-6 rounded-lg shadow-md transition-all duration-300 reveal-item"
+          >
+            <div
+              class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-book text-blue-600 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              Kurikulum Digital
+            </h3>
+            <p class="text-gray-600">
+              Akses materi pembelajaran, tugas, dan penilaian secara digital dan
+              terstruktur.
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div
+            class="feature-card bg-white p-6 rounded-lg shadow-md transition-all duration-300 reveal-item"
+          >
+            <div
+              class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              Analitik & Laporan
+            </h3>
+            <p class="text-gray-600">
+              Dapatkan wawasan mendalam tentang performa sekolah melalui
+              dashboard analitik yang komprehensif.
+            </p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div
+            class="feature-card bg-white p-6 rounded-lg shadow-md transition-all duration-300 reveal-item"
+          >
+            <div
+              class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-money-bill-wave text-blue-600 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              Manajemen Keuangan
+            </h3>
+            <p class="text-gray-600">
+              Kelola pembayaran SPP, gaji, dan anggaran sekolah dengan sistem
+              yang transparan dan akurat.
+            </p>
+          </div>
+
+          <!-- Feature 6 -->
+          <div
+            class="feature-card bg-white p-6 rounded-lg shadow-md transition-all duration-300 reveal-item"
+          >
+            <div
+              class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4"
+            >
+              <i class="fas fa-comments text-blue-600 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              Komunikasi Terintegrasi
+            </h3>
+            <p class="text-gray-600">
+              Tingkatkan komunikasi antara sekolah, guru, siswa, dan orang tua
+              melalui platform terintegrasi.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="tentang" class="py-16 md:py-24 bg-gray-50">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-1/2 mb-10 md:mb-0 reveal-left">
+            <img
+              src="./images/school-management.svg"
+              alt="School Management"
+              class="rounded-lg shadow-lg"
+            />
+          </div>
+          <div class="md:w-1/2 md:pl-12 reveal-right">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              Tentang Sistem Kami
+            </h2>
+            <p class="text-lg text-gray-600 mb-6">
+              SIMS adalah sistem manajemen sekolah komprehensif yang dirancang
+              untuk memenuhi kebutuhan sekolah modern. Kami memahami tantangan
+              dalam mengelola institusi pendidikan dan menyediakan solusi yang
+              efisien, mudah digunakan, dan terintegrasi.
+            </p>
+            <p class="text-lg text-gray-600 mb-8">
+              Dengan pengalaman lebih dari 2 tahun dalam industri edtech, kami
+              telah membantu ratusan sekolah di seluruh Indonesia untuk
+              meningkatkan efisiensi operasional dan kualitas pendidikan mereka.
+            </p>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8">
+              <div
+                class="stat-card bg-white p-4 rounded-lg shadow-sm text-center"
+              >
+                <span class="block text-3xl font-bold text-blue-600">500+</span>
+                <span class="text-gray-600">Sekolah</span>
+              </div>
+              <div
+                class="stat-card bg-white p-4 rounded-lg shadow-sm text-center"
+              >
+                <span class="block text-3xl font-bold text-blue-600"
+                  >250K+</span
+                >
+                <span class="text-gray-600">Siswa</span>
+              </div>
+              <div
+                class="stat-card bg-white p-4 rounded-lg shadow-sm text-center"
+              >
+                <span class="block text-3xl font-bold text-blue-600">98%</span>
+                <span class="text-gray-600">Kepuasan</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimoni" class="py-16 md:py-24 bg-white">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16 reveal-top">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Apa Kata Mereka
+          </h2>
+          <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            Dengarkan pengalaman dari para pengguna sistem kami.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Testimonial 1 -->
+          <div
+            class="testimonial-card bg-gray-50 p-6 rounded-lg shadow-md transition-all duration-300 reveal-item"
+          >
+            <div class="flex items-center mb-4">
+              <img
+                class="h-12 w-12 rounded-full"
+                src="https://robohash.org/user.png?size=150x150"
+                alt="User Icon"
+                alt="User"
+              />
+              <div class="ml-4">
+                <h4 class="text-lg font-semibold text-gray-900">
+                  Ahmad Sulaiman
+                </h4>
+                <p class="text-gray-600">Kepala Sekolah, SMAN 1 Jakarta</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "SIMS telah mengubah cara kami mengelola sekolah. Proses
+              administrasi menjadi lebih efisien, dan kami dapat fokus pada
+              peningkatan kualitas pendidikan."
+            </p>
+            <div class="mt-4 flex text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div
+            class="testimonial-card bg-gray-50 p-6 rounded-lg shadow-md transition-all duration-300 reveal-item"
+          >
+            <div class="flex items-center mb-4">
+              <img
+                class="h-12 w-12 rounded-full"
+                src="https://robohash.org/user.png?size=150x150"
+                alt="User Icon"
+                alt="User"
+              />
+              <div class="ml-4">
+                <h4 class="text-lg font-semibold text-gray-900">Siti Rahayu</h4>
+                <p class="text-gray-600">Guru, SMP Cendekia Bandung</p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "Sebagai guru, saya sangat terbantu dengan sistem ini. Penilaian
+              siswa, absensi, dan komunikasi dengan orang tua menjadi lebih
+              mudah dan terorganisir."
+            </p>
+            <div class="mt-4 flex text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div
+            class="testimonial-card bg-gray-50 p-6 rounded-lg shadow-md transition-all duration-300 reveal-item"
+          >
+            <div class="flex items-center mb-4">
+              <img
+                class="h-12 w-12 rounded-full"
+                src="https://robohash.org/user.png?size=150x150"
+                alt="User Icon"
+                alt="User"
+              />
+              <div class="ml-4">
+                <h4 class="text-lg font-semibold text-gray-900">
+                  Budi Santoso
+                </h4>
+                <p class="text-gray-600">
+                  Orang Tua Siswa, SD Harapan Surabaya
+                </p>
+              </div>
+            </div>
+            <p class="text-gray-700 italic">
+              "Sebagai orang tua, saya dapat memantau perkembangan anak saya
+              dengan mudah. Komunikasi dengan guru juga menjadi lebih lancar
+              berkat sistem ini."
+            </p>
+            <div class="mt-4 flex text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="daftar" class="py-16 md:py-24 bg-blue-600">
+      <div
+        class="container mx-auto px-4 sm:px-6 lg:px-8 text-center reveal-top"
+      >
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+          Siap Meningkatkan Kualitas Pendidikan?
+        </h2>
+        <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+          Bergabunglah dengan ratusan sekolah yang telah menggunakan SIMS untuk
+          meningkatkan efisiensi dan kualitas pendidikan mereka.
+        </p>
+        <div
+          class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4"
+        >
+          <a
+            href="https://wa.me/6287841185404?text=Halo%20Admin%2C%20saya%20ingin%20bertanya%20tentang%20sistem%20informasi%20manajemen%20sekolah"
+            target="_blank"
+            class="inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
+          >
+            Hubungi Kami
+          </a>
+          <a
+            href="#demo"
+            class="inline-flex justify-center items-center px-6 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
+          >
+            Jadwalkan Demo
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="kontak" class="bg-gray-900 text-white py-12">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="md:col-span-1">
+            <img
+              class="h-10 w-auto mb-4"
+              src="./images/favicon.ico"
+              alt="SIMS Logo"
+            />
+            <p class="text-gray-400 mb-4">
+              Sistem Informasi Manajemen Sekolah terpadu untuk institusi
+              pendidikan modern.
+            </p>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors duration-300"
+              >
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors duration-300"
+              >
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors duration-300"
+              >
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors duration-300"
+              >
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="md:col-span-1">
+            <h3 class="text-lg font-semibold mb-4">Tautan Cepat</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#beranda"
+                  class="text-gray-400 hover:text-white transition-colors duration-300"
+                  >Beranda</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#fitur"
+                  class="text-gray-400 hover:text-white transition-colors duration-300"
+                  >Fitur</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#tentang"
+                  class="text-gray-400 hover:text-white transition-colors duration-300"
+                  >Tentang Kami</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#testimoni"
+                  class="text-gray-400 hover:text-white transition-colors duration-300"
+                  >Testimoni</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors duration-300"
+                  >Blog</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors duration-300"
+                  >Kebijakan Privasi</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-1">
+            <h3 class="text-lg font-semibold mb-4">Layanan</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors duration-300"
+                  >Implementasi Sistem</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors duration-300"
+                  >Pelatihan</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors duration-300"
+                  >Konsultasi</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors duration-300"
+                  >Dukungan Teknis</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors duration-300"
+                  >Pengembangan Kustom</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="md:col-span-1">
+            <h3 class="text-lg font-semibold mb-4">Hubungi Kami</h3>
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <i class="fas fa-map-marker-alt mt-1 mr-3 text-gray-400"></i>
+                <span class="text-gray-400"
+                  >Jl. Tuntungan 1, Kota Medan, Indonesia</span
+                >
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-phone-alt mr-3 text-gray-400"></i>
+                <span class="text-gray-400">0878-4118-5404</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fas fa-envelope mr-3 text-gray-400"></i>
+                <span class="text-gray-400">bintangawan0418@gmail.com</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+          <p class="text-gray-400">
+            &copy; 2025 Sistem Informasi Manajemen Sekolah. Build With love by
+            Bintang
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Chatbot -->
+    <div class="chatbot-toggle">
+      <button
+        class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-700 focus:outline-none transition-all duration-300"
+      >
+        <i class="fas fa-comments text-white text-2xl"></i>
+      </button>
+    </div>
+
+    <div class="chatbot-container chatbot-hidden">
+      <div class="chatbot-header">
+        <div class="flex items-center">
+          <i class="fas fa-robot mr-2"></i>
+          <span>SIMS Assistant</span>
+        </div>
+        <button class="chatbot-close focus:outline-none">
+          <i class="fas fa-times text-white"></i>
+        </button>
+      </div>
+      <div class="chatbot-messages flex flex-col">
+        <div class="message bot-message">
+          Halo! Selamat datang di SIMS. Ada yang bisa saya bantu tentang sistem
+          manajemen sekolah kami?
+        </div>
+      </div>
+      <div class="chatbot-input">
+        <input
+          type="text"
+          placeholder="Ketik pesan Anda di sini..."
+          class="chatbot-input-field"
+        />
+        <button class="chatbot-send">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="main.js"></script>
+  </body>
+</html>
